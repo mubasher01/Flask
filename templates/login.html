@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MightyHacker</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Roboto Mono font globally */
+        body {
+            font-family: "Roboto Mono", monospace;
+            background-color: #003366; /* Dark Blue background */
+            background: url("{{ url_for('static', filename='images/5.jpg') }}") no-repeat center center fixed;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure footer is at the bottom of the page */
+        }
+
+        /* Custom Navbar Styles */
+        .navbar-custom {
+            background-color: #e0e0e0; /* Light Grey background */
+        }
+        .navbar-custom .navbar-brand, 
+        .navbar-custom .nav-link {
+            color: #003366; /* Dark Blue text */
+        }
+        .navbar-custom .nav-link {
+            margin-left: 15px;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #001f3f; /* Darker Blue on hover */
+        }
+        .navbar-custom .btn-login {
+            color: #003366; /* Dark Blue text */
+            border-color: #003366; /* Dark Blue border */
+        }
+        .navbar-custom .btn-login:hover {
+            color: #ffffff; /* White text on hover */
+            background-color: #003366; /* Dark Blue background */
+            border-color: #003366; /* Dark Blue border */
+        }
+        .navbar-custom .nav-item {
+            margin: 0 15px; /* Margin between items */
+        }
+        .navbar-custom .btn-login {
+            margin-right: 30px; /* Margin from the right corner */
+        }
+        .navbar-custom .navbar-brand {
+            margin-left: 30px; /* Margin from the left corner */
+        }
+        .navbar-toggler img {
+            width: 30px; /* Adjust size as needed */
+            height: auto;
+        }
+        .navbar-brand img {
+            width: 60px; /* Larger size for avatar */
+            height: 60px; /* Maintain aspect ratio */
+            border-radius: 50%; /* Make it circular */
+            border: 2px solid #003366; /* Dark Blue border */
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 5% auto; /* Center horizontally and add top margin */
+            padding: 20px;
+            background-color: transparent; /* Remove background color */
+            border-radius: 10px; /* Rounded corners */
+            /* No box shadow to remove card background effect */
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px; /* Space between heading and form */
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
+        .form-control.success {
+            border-color: #28a745; /* Green border for success */
+            background-color: #d4edda; /* Light green background for success */
+        }
+
+        .form-control.error {
+            border-color: #dc3545; /* Red border for error */
+            background-color: #f8d7da; /* Light red background for error */
+        }
+
+        .form-text {
+            font-size: 0.875rem; /* Smaller text for error/success messages */
+            color: #dc3545; /* Red color for error */
+        }
+
+        .form-text.success {
+            color: #28a745; /* Green color for success */
+        }
+
+        .login-button {
+            margin-top: 20px;
+            background-color: #003366;
+            border-color: #003366;
+        }
+
+        .forgot-password, .sign-up {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #e0e0e0; /* Light Grey text */
+        }
+
+        .forgot-password a, .sign-up a {
+            color: #e0e0e0; /* Light Grey text */
+        }
+
+        .forgot-password a:hover, .sign-up a:hover {
+            color: #ffffff; /* White text on hover */
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #e0e0e0; /* Light Grey background */
+            color: #003366; /* Dark Blue text */
+            text-align: center; /* Center align text */
+            padding: 40px 20px; /* Increased padding */
+            width: 100%;
+            margin-top: auto; /* Push footer to the bottom */
+        }
+        .footer p {
+            margin: 0; /* Remove default margin */
+        }
+        .footer h4 {
+            font-size: 1.5rem; /* Slightly larger font for heading */
+            font-weight: bold; /* Bold heading */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="{{ url_for('index') }}" id="logoButton">
+            <img src="{{ url_for('static', filename='images/Logo.jpg') }}" alt="Avatar Button">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <!-- Empty space for alignment -->
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('contact') }}" id="contactButton">Contact</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark btn-login" href="{{ url_for('login') }}" id="loginButton">Login</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Login Form -->
+    <div class="login-container">
+        <h2 class="text-center">Login</h2>
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                <small class="form-text"></small>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                <small class="form-text"></small>
+            </div>
+            <div class="text-center"> <!-- Center the button -->
+                <button type="submit" class="btn btn-primary login-button">Login</button>
+            </div>
+            <div class="forgot-password">
+                <a href="forgetpassword.html">Forgot Password?</a>
+            </div>
+            <div class="sign-up">
+                <a href="{{ url_for('signup') }}">Sign Up</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>&copy; 2024 MightyHacker. All rights reserved.</p>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

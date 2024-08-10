@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <style>
+        /* Roboto Mono Font Applied Globally */
+        body {
+            font-family: "Roboto Mono", monospace;
+        }
+
+        /* Custom Navbar Styles */
+        .navbar-custom {
+            background-color: #e0e0e0; /* Light Grey background */
+        }
+        .navbar-custom .navbar-brand, 
+        .navbar-custom .nav-link {
+            color: #003366; /* Dark Blue text */
+        }
+        .navbar-custom .nav-link {
+            margin-left: 15px;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #001f3f; /* Darker Blue on hover */
+        }
+        .navbar-custom .btn-login {
+            color: #003366; /* Dark Blue text */
+            border-color: #003366; /* Dark Blue border */
+        }
+        .navbar-custom .btn-login:hover {
+            color: #ffffff; /* White text on hover */
+            background-color: #003366; /* Dark Blue background */
+            border-color: #003366; /* Dark Blue border */
+        }
+        .navbar-custom .nav-item {
+            margin: 0 15px; /* Margin between items */
+        }
+        .navbar-custom .btn-login {
+            margin-right: 30px; /* Margin from the right corner */
+        }
+        .navbar-custom .navbar-brand {
+            margin-left: 30px; /* Margin from the left corner */
+        }
+        .navbar-toggler img {
+            width: 30px; /* Adjust size as needed */
+            height: auto;
+        }
+        .navbar-brand img {
+            width: 60px; /* Larger size for avatar */
+            height: 60px; /* Maintain aspect ratio */
+            border-radius: 50%; /* Make it circular */
+            border: 2px solid #003366; /* Dark Blue border */
+        }
+
+        /* Custom Body Styles */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure the body takes up at least the full viewport height */
+            background: url("{{ url_for('static', filename='images/5.jpg') }}") no-repeat center center fixed;
+            background-size: cover; /* Cover the whole screen */
+            color: #fff; /* Text color for better readability on dark background */
+        }
+        .content {
+            flex: 1; /* Allows content to grow and fill available space */
+            position: relative; /* Set relative positioning for absolute children */
+        }
+        .large-text {
+            font-size: 4rem; /* Large text size */
+            font-weight: bold; /* Bold text */
+            line-height: 1.4; /* Spacing between lines */
+            color: #fff; /* White text */
+            position: absolute; /* Absolute positioning */
+            top: 10%; /* Position from the top */
+            left: 10%; /* Position from the left */
+            background-color: rgba(0, 0, 0, 0.5); /* Optional: Add background for better readability */
+            padding: 20px; /* Padding around the text */
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        /* Highlight Styling for MightyHacker */
+        .highlight {
+            font-size: 4.5rem; /* Slightly larger font size */
+            color: #ffcc00; /* Bright Yellow color */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Shadow effect for better visibility */
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #e0e0e0; /* Light Grey background */
+            color: #003366; /* Dark Blue text */
+            text-align: center; /* Center align text */
+            padding: 40px 20px; /* Increased padding */
+            width: 100%;
+            position: relative; /* Ensure footer is positioned relative to its container */
+        }
+        .footer p {
+            margin: 0; /* Remove default margin */
+        }
+        .footer h4 {
+            font-size: 1.5rem; /* Slightly larger font for heading */
+            font-weight: bold; /* Bold heading */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#" id="logoButton">
+            <!-- Circular Avatar Image Button -->
+            <img src="{{ url_for('static', filename='images/Logo.jpg') }}" alt="Avatar Button">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <!-- Empty space for alignment -->
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact" id="contactButton">Contact</a>
+                </li>
+                {% if logged_in %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ url_for('static', filename='images/ava.png') }}" alt="Avatar" class="rounded-circle" width="30" height="30">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% if user_role == 'Admin' %}
+                            <a class="dropdown-item" href="/creategroup">Create Group</a>
+                            <a class="dropdown-item" href="/overview">Overview</a>
+                            <a class="dropdown-item" href="/attack">Attack</a>
+                            <a class="dropdown-item" href="/joingroup">Join a Group</a>
+                            <a class="dropdown-item" href="/myattacks">My Attacks</a>
+                        {% elif user_role == 'Instructor' %}
+                            <a class="dropdown-item" href="/creategroup">Create Group</a>
+                            <a class="dropdown-item" href="/attack">Attack</a>
+                            <a class="dropdown-item" href="/myattacks">My Attacks</a>
+                        {% elif user_role == 'Learner' %}
+                            <a class="dropdown-item" href="/joingroup">Join a Group</a>
+                            <a class="dropdown-item" href="/attack">Attack</a>
+                            <a class="dropdown-item" href="/myattacks">My Attacks</a>
+                        {% elif user_role == 'Researcher' %}
+                            <a class="dropdown-item" href="/attack">Attack</a>
+                            <a class="dropdown-item" href="/myattacks">My Attacks</a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark btn-login" href="{{ url_for('login') }}" id="loginButton">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <div class="content">
+        <div class="large-text">
+            Unleash Your Cyber Prowess<br>
+            with <span class="highlight">MightyHacker</span>
+            Empowering the Next Generation of Security Experts<br>
+            Explore, Learn, and Master Advanced Attack Techniques
+        </div>
+    </div>
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>&copy; 2024 MightyHacker. All rights reserved.</p>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

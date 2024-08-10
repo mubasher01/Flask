@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Attacks - MightyHacker</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Roboto Mono font globally */
+        body {
+            font-family: "Roboto Mono", monospace;
+            background-color: #003366; /* Dark Blue background */
+            
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure footer is at the bottom of the page */
+        }
+
+        /* Custom Navbar Styles */
+        .navbar-custom {
+            background-color: #e0e0e0; /* Light Grey background */
+        }
+        .navbar-custom .navbar-brand, 
+        .navbar-custom .nav-link {
+            color: #003366; /* Dark Blue text */
+        }
+        .navbar-custom .nav-link {
+            margin-left: 15px;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #001f3f; /* Darker Blue on hover */
+        }
+        .navbar-custom .btn-login {
+            color: #003366; /* Dark Blue text */
+            border-color: #003366; /* Dark Blue border */
+        }
+        .navbar-custom .btn-login:hover {
+            color: #ffffff; /* White text on hover */
+            background-color: #003366; /* Dark Blue background */
+            border-color: #003366; /* Dark Blue border */
+        }
+        .navbar-custom .nav-item {
+            margin: 0 15px; /* Margin between items */
+        }
+        .navbar-custom .btn-login {
+            margin-right: 30px; /* Margin from the right corner */
+        }
+        .navbar-custom .navbar-brand {
+            margin-left: 30px; /* Margin from the left corner */
+        }
+        .navbar-toggler img {
+            width: 30px; /* Adjust size as needed */
+            height: auto;
+        }
+        .navbar-brand img {
+            width: 60px; /* Larger size for avatar */
+            height: 60px; /* Maintain aspect ratio */
+            border-radius: 50%; /* Make it circular */
+            border: 2px solid #003366; /* Dark Blue border */
+        }
+
+        .myattacks-container {
+            max-width: 1000px;
+            margin: 5% auto; /* Center horizontally and add top margin */
+            padding: 20px;
+            background-color: #ffffff; /* White background for content */
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        .myattacks-container h2 {
+            margin-bottom: 20px; /* Space between heading and table */
+            color: #001f3f; /* Dark Blue text */
+        }
+
+        .myattacks-container table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .myattacks-container table th, .myattacks-container table td {
+            padding: 10px;
+            border: 1px solid #ddd; /* Light border for table cells */
+        }
+
+        .myattacks-container table th {
+            background-color: #003366;
+            color: #fff;
+        }
+
+        .myattacks-container table td {
+            background-color: #f9f9f9;
+        }
+
+        .footer {
+            background-color: #e0e0e0; /* Light Grey background */
+            color: #003366; /* Dark Blue text */
+            text-align: center; /* Center align text */
+            padding: 40px 20px; /* Increased padding */
+            width: 100%;
+            margin-top: auto; /* Push footer to the bottom */
+        }
+        .footer p {
+            margin: 0; /* Remove default margin */
+        }
+        .footer h4 {
+            font-size: 1.5rem; /* Slightly larger font for heading */
+            font-weight: bold; /* Bold heading */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="/" id="logoButton">
+            <!-- Circular Avatar Image Button -->
+            <img src="{{ url_for('static', filename='images/Logo.jpg') }}" alt="Avatar Button">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <!-- Empty space for alignment -->
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact" id="contactButton">Contact</a>
+                </li>
+                {% if logged_in %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ url_for('static', filename='images/ava.png') }}" alt="Avatar" class="rounded-circle" width="30" height="30">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        
+
+                        {% if user_role == 'Admin' %}
+                            <a class="dropdown-item" href="/creategroup">Create Group</a>
+                            <a class="dropdown-item" href="/overview">Overview</a>
+                            <a class="dropdown-item" href="/attack">Attack</a>
+                            <a class="dropdown-item" href="/joingroup">Join a Group</a>
+                            <a class="dropdown-item" href="/myattacks">My Attacks</a>
+                        {% elif user_role == 'Instructor' %}
+                            <a class="dropdown-item" href="/creategroup">Create Group</a>
+                            <a class="dropdown-item" href="/attack">Attack</a>
+                            <!-- <a class="dropdown-item" href="/joingroup">Join a Group</a> -->
+                            <a class="dropdown-item" href="/myattacks">My Attacks</a>
+                        {% elif user_role == 'Learner' %}
+                            <a class="dropdown-item" href="/joingroup">Join a Group</a>
+                            <a class="dropdown-item" href="/attack">Attack</a>
+                            <a class="dropdown-item" href="/myattacks">My Attacks</a>
+                            <!-- Learners cannot see Create Group or Overview -->
+                        {% elif user_role == 'Researcher' %}
+                            <a class="dropdown-item" href="/attack">Attack</a>
+                            <a class="dropdown-item" href="/myattacks">My Attacks</a>
+
+
+                            <!-- Researchers can only see Attack and My Attacks -->
+                        {% endif %}
+
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark btn-login" href="{{ url_for('login') }}" id="loginButton">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- My Attacks Table -->
+    <div class="myattacks-container">
+        <h2 class="text-center">My Attacks</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Attack Name</th>
+                    <th>Attack Date</th>
+                    <th>Parameters Used</th>
+                    <th>PCAP</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example Row -->
+                <tr>
+                    <td>Example Attack</td>
+                    <td>2024-07-27</td>
+                    <td>Param1, Param2</td>
+                    <td><a href="example-file.txt" download>Download File</a></td>
+                </tr>
+                <!-- More rows can be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>&copy; 2024 MightyHacker. All rights reserved.</p>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
