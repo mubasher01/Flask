@@ -83,16 +83,6 @@
             border-color: #003366;
         }
 
-        .video-container {
-            margin-top: 30px; /* Space between video and form */
-        }
-
-        .video-container iframe {
-            width: 100%;
-            height: 400px;
-            border-radius: 10px;
-        }
-
         .footer {
             background-color: #e0e0e0; /* Light Grey background */
             color: #003366; /* Dark Blue text */
@@ -174,7 +164,7 @@
                     <input type="text" class="form-control" id="dos-target" name="target_ip" required>
                 </div>
                 <div class="form-group">
-                    <label for="dos-duration">packets</label>
+                    <label for="dos-duration">Packets</label>
                     <input type="number" class="form-control" id="dos-duration" name="duration" min="1" required>
                 </div>
             {% elif attack_type == 'arp' %}
@@ -205,26 +195,31 @@
                     <input type="text" class="form-control" id="dns-redirect" name="redirect_ip" required>
                 </div>
             {% endif %}
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Execute Attack</button>
-            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-        <div class="video-container text-center">
-            <iframe src="{{ video_url }}" frameborder="0" allowfullscreen></iframe>
-        </div>
+
+        <!-- Video Container -->
         <div class="text-center mt-4">
-            <a href="/feedback" class="btn btn-secondary">Give Feedback</a>
+            <video controls style="width: 100%; max-width: 800px; height: auto; border-radius: 10px;">
+                <source src="{{ video_url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Feedback Button -->
+        <div class="text-center mt-4">
+            <a href="/feedback" class="btn btn-outline-light">Give Feedback</a>
         </div>
     </div>
 
-    <!-- Footer Section -->
-    <div class="footer">
+    <!-- Footer -->
+    <footer class="footer">
         <p>&copy; 2024 MightyHacker. All rights reserved.</p>
-    </div>
+    </footer>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

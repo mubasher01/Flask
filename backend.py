@@ -191,6 +191,7 @@ def remove_group_member(group_id, user_id):
     db.session.commit()
     flash('Member removed successfully!', 'success')
     return redirect(url_for('group_details', group_id=group_id))
+
 @app.route('/joingroup', methods=['GET', 'POST'])
 def join_group():
     if 'logged_in' not in session or session['role'] != 'Learner':
@@ -280,10 +281,16 @@ def overview():
 def contact():
     return render_template('contact.html',logged_in=True, user_role=session.get('role'))
 
-@app.route('/after_attack')
+@app.route('/after_attack', methods=['GET'])
 def after_attack():
-    attack_type = request.args.get('attackType')
-    return render_template('after_attack.html', attack_type=attack_type,logged_in=True, user_role=session.get('role'))
+    attack_type = request.args.get('attackType', 'default')
+    video_urls = {
+        'dos': url_for('static', filename='videos/DoS_Visualization_-_Made_with_Clipchamp.mp4'),
+        'tcp': url_for('static', filename='videos/TCP_Visualization_-_Made_with_Clipchamp.mp4'),
+        'arp': url_for('static', filename='videos/ARP_Visualization_-_Made_with_Clipchamp.mp4')
+    }
+    video_url = video_urls.get(attack_type, url_for('static', filename='videos/default.mp4'))
+    return render_template('after_attack.html', attack_type=attack_type, video_url=video_url,logged_in=True, user_role=session.get('role'))
 
 @app.route('/attack_action', methods=['POST'])
 def attack_action():
@@ -302,7 +309,7 @@ def attack_action():
 @app.route('/attack_details/<int:simulation_id>')
 def attack_details(simulation_id):
     simulation = Simulation.query.get_or_404(simulation_id)
-    return render_template('attack_details.html', simulation=simulation)
+    return render_template('attack_details.html', simulation=simulation,logged_in=True, user_role=session.get('role'))
 
 @app.route('/logout')
 def logout():
